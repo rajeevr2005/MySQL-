@@ -1,3 +1,653 @@
 Database is a organised collection of data.A method to manipulate or access the data.
 
 RDBMS: Data in the form of row or column is called RDBMS.
+
+//MySQL is not case sensitive.
+
+//Database is collection of data in a format that can be easily accessed.
+
+//DBMS=A software application used to manage our database is called Database Management System.
+
+//SQL=SQL is a Programming language used to interact with relational databases. It is used to perform CRUD operation: Create, Read, Update, Delete
+
+//Table=A table is a collection of related data held in a table format within a database.
+
+
+
+--------------------------------------------------------------
+//Create Database
+
+Query= create database db_name;
+Example=create database college;
+
+//create database if not exists learning 
+
+--------------------------------------------------------------
+//show database
+
+Query=show databases
+
+-----------------------------------------------------------
+//Delete Database
+
+Query= drop database db_name;
+Example=drop database college;
+
+drop database if exists college
+
+-----------------------------------------------------
+
+schema means design means columns
+
+------------------------------------------------------
+
+//Create table inside college database
+
+create table student(
+	id int primary key,
+    name varchar(50),
+    age int not null
+);
+
+-------------------------------------------------------
+// Insert data into student table
+
+//insert single row
+Query= insert into student values(1, "Rajeev" , 20);
+
+//insert multiple row
+Query=insert into student values(1,"Rajeev",20),(2,"Raj",21);
+
+-------------------------------------------------------
+//Show data
+
+Example= select * from student;
+
+-----------------------------------------------------
+//Delete row from the table
+
+Query=DELETE FROM student WHERE id = 6;
+
+
+-------------------------------------------------------------------
+
+//Key
+
+//Primary key= It is a column (or set of column) in a table that uniquely identifies each row(a unique id kyuki id sabka alag hota h, name ko isliye PK nhi bnate h kyuki name to kisi kisi ka same hota h). There is only one primary key & it should be unique and not null. 
+
+//Foreign key= A foreign key is a column(or a sets of columns) in a table that refers to the primary key. There can be multiple Foreign keys. Foreign keys can have duplicate & null values.
+
+Foreign key two table ke bich relationship bnata h.
+Foreign key wo column hota h jo dusre table ke primary key ko refer karta h.
+foreign key ek table ko dusre table se link karne ka kaam krta h
+
+
+----------------------------------------------------
+
+//cascading for foreign key
+iska matlab h ki agar hm ek jagah change kiye h to dusri jagah apne aap change hona chahiye
+
+
+create table dept(
+	id int primary key,
+	name varchar(50)	
+);
+
+create table teacher(
+	id int primary key,
+    name varchar(50),
+    dept_id int,
+    foreign key(dept_id) references dept(id)
+    on update cascade					//jab  bhi dept table me kuch change hoga to teacher me automatic change hoga
+    on delete cascade
+);
+-------------------------------------------------------------------
+
+//Constraints
+
+SQL constraints are used to specify rules for data in a table.
+
+-----------------------------------------------------------
+//NOT NULL constraint    columns cannot have a null value
+	
+
+-----------------------------------------------------------
+//UNIQUE                 all values in column are different
+
+Example=  create table user(id int unique);
+
+insert into user(101);
+insert into user(101);		//Yaha pe hmlog do baar ek hi id nhi de sakte h.
+
+
+-----------------------------------------------------------
+//primary key            makes a column unique & not null and used for only one column 
+
+--------------------------------------------------------------------------
+
+//DEFAULT		set the default value of a column
+
+salary int default 25000    //iska matlab hai ki jab salary ka data koi add kiya nhi to default 25000 ho jayega, jo data enter karega wo 			      uska value rahega
+
+create table emp(
+	id int,
+	salary int default 25000
+	
+);
+
+insert into emp(id) values (101);
+
+
+---------------------------------------------------------------------------
+
+//CHECK
+
+create table emp(
+	age int check(age>=18),
+	salary int default 25000
+	
+);
+
+insert into emp(age) values (12);		//yaha pe error aayega kyuki age 12 enter kar rahe h.
+
+
+
+---------------------------------------------------------------------------
+
+create table student(
+id int,
+name varchar(50),
+marks int
+);
+
+insert into student values (1,"Rajeev",80);
+insert into student values (2,"Raj",78);
+insert into student values (3,"Rajat",79);
+insert into student values (4,"Rakshit",82);
+insert into student values (5,"Ram",83);
+
+select * from student;
+
+use college;
+DELETE FROM student WHERE id = 6;
+
+
+-------------------------------------------------------------------------------
+
+//select
+
+Query=select name from student;
+Query=select email from student;
+Query=select distinct name from student;		//distinct yaha pe unique value dikhayega, jo duplicate value h usko nhi dikheyga
+
+
+-----------
+create table student(
+id int,
+name varchar(20)
+);
+
+insert into student
+(id,name) 
+values
+(1,"Ram"),
+(2,"shyam"),
+(3,"Ram"),
+(4,"Gyan");
+
+select distinct name from student;
+
+//output=
+Ram
+shyam
+Gyan
+
+
+----------------
+//New table created
+
+Query=select *  from student where marks > 80;
+
+Query=select * from student where city="mumbai";
+
+Query= select * from student where marks > 80 AND city="mumbai";
+
+
+------------------
+//BETWEEN
+
+create table student(
+id int,
+name varchar(20),
+marks int,
+city varchar(50)
+);
+
+insert into student
+(id,name,marks,city) 
+values
+(1,"Ram",70,"mumbai"),
+(2,"shyam",80,"Gujarat"),
+(3,"Ram",90,"Goa"),
+(4,"Gyan",100,"Rajasthan");
+
+select * from student where marks >= 80 && marks < 90;		//output=2	shyam	80	Gujarat
+
+
+select * from student where marks between 80 and 90;		//output=2	shyam	80	Gujarat		//isme 80 aur 90 dono include kiya jata h
+									 3	Ram	90	Goa
+
+
+select *  from student where city in("Haryana","Delhi"); 		//isme jo jo Haryana aur Delhi city se belong karta h uska data dikha dega
+
+select *  from student where city not in("Haryana","Delhi"); 		//isme Harayan aur Delhi city wale log ko chor ke baaki sabko dikha dega
+
+select *  from student limit 3;		//isme starting se 3 log ka data dikhayega
+
+select *  from student where marks > 75 limit 3;	//iska matlab hai jiska marks 75 se greater hoga n to upper se 3 data dikayega
+
+
+--------------------------------------------------------------------------------------
+
+//ORDER BY
+
+//ASC :- To sort in ascending order
+
+QUERY=	select * from student order by name asc;	//Yaha pe name ko ascending order me dikha dega
+
+4	Gyan	100	Rajasthan
+6	Rajesh	50	Haryana
+1	Ram	70	mumbai
+3	Ram	90	Goa
+5	Ramesh	60	Delhi
+2	shyam	80	Gujarat
+
+
+QUERY = select * from student order by marks asc;	
+
+
+//DESC :- To sort in descending order
+
+Query=select * from student order by marks desc;
+
+//agar mujhe top 3 students ka marks dekhna h to kaise karenge
+
+QUERY=select * from student order by marks desc limit 3;	//isme sabse pahle descending order me arrange kar diye h phir starting ke 3 print kara diye h limit laga kar
+
+4	Gyan	100	Rajasthan
+3	Ram	90	Goa
+2	shyam	80	Gujarat
+
+
+------------------------------------------------------------------------------------------
+//Aggregate Functions= Aggregate Functions perform a calculation on a set of values, and return a single value.
+
+1. COUNT() = count no. of data
+   QUERY = select count(id) from student; 		//output=6 
+
+2. MAX() = return maximum value
+   QUERY = select max(marks) from student; 		//output=100 
+
+3. AVG = return avg value
+   QUERY = select avg(marks) from student; 		//output=75
+
+4. MIN()
+
+5. SUM()
+
+--------------------------------------------------------------------------------------------
+
+//GROUP BY
+
+Groups row that have the same values into summary rows
+
+
+-----------------
+
+insert into student
+(id,name,marks,city) 
+values
+(1,"Ram",70,"mumbai"),
+(2,"shyam",80,"Gujarat"),
+(3,"Ram",90,"Goa"),
+(4,"Gyan",100,"Rajasthan"),
+(5,"Ramesh",60,"Delhi"),
+(6,"Rajesh",50,"Haryana"),
+(7,"Ram",77,"mumbai"),
+(8,"shyam",88,"Gujarat"),
+(9,"Ram",99,"Goa"),
+(10,"Gyan",90,"Rajasthan"),
+(11,"Ramesh",50,"Delhi"),
+(12,"Rajesh",40,"Haryana")
+;
+
+
+QUERY = select city from student group by city;		//isme city wise group ho jayenge
+
+//output=
+mumbai
+Gujarat
+Goa
+Rajasthan
+Delhi
+Haryana
+
+QUERY=select city, count(id) from student group by city;
+
+//output=
+
+mumbai	2		//yahape ye bta raha h ki Mumbai se 2 log hai 
+Gujarat	2
+Goa	2
+Rajasthan  2
+Delhi	2
+Haryana	2
+
+QUERY= select city, avg(marks) from student group by city;	//yaha pe city ke base pe avg marks calculate kiya gya h
+
+//output=
+mumbai	73.5000
+Gujarat	84.0000
+Goa	94.5000
+Rajasthan	95.0000
+Delhi	55.0000
+Haryana	45.0000
+
+
+
+Q. write a query to find the average marks of city order by ascending order
+
+	QUERY= select city, avg(marks) from student group by city order by city; 
+	
+	//output= Delhi	55.0000
+		  Goa	94.5000
+		  Gujarat	84.0000
+	          Haryana	45.0000
+		 mumbai	73.5000
+		 Rajasthan	95.0000
+
+
+
+QUERY = select city, avg(marks) from student group by city order by avg(marks);		//isme average marks ke basis pe ascending order me aayega
+
+//output=
+Haryana	45.0000
+Delhi	55.0000
+mumbai	73.5000
+Gujarat	84.0000
+Goa	94.5000
+Rajasthan	95.0000
+
+
+QUERY = select city, avg(marks) from student group by city order by avg(marks) desc;	//yaha pe descending likhna jaroori h, nhi to bydefault ascending order me deta h
+
+//output=
+
+Haryana	45.0000
+Delhi	55.0000
+mumbai	73.5000
+Gujarat	84.0000
+Goa	94.5000
+Rajasthan	95.0000
+
+------------------------------------------------------------------------------------------
+
+//Having clause
+similar to where i.e applies some condition on rows. used when we want to apply any condition after grouping.
+
+QUERY=select city, count(name) from student group by city having max(marks) > 90 ;
+
+//output=
+Goa	2
+Rajasthan	2
+
+
+//General order to write
+select column
+from table_name
+where condition
+group by columns
+having condition
+order by columns asc
+
+QUERY= select city from student where grade="A" group by city having max(marks) > 90;
+
+--------------------------------------------------------------------------------------------
+
+//Delete 
+
+QUERY= delete from student where marks < 33;
+
+--------------------------------------------------------------------------------------------
+
+//alter(to change the schema)
+
+//table create
+
+create table student(
+	id int,
+    name varchar(50),
+    age int
+);
+
+insert into student(id,name,age) values (1,"Rajeev",20),(2,"Gautam",21),(3,"Sonu",22),(4,"Ashish",23);
+
+
+alter table student add column cgpa int;	// to add column in existing table
+
+alter table student drop column cgpa;		//to delete the column
+
+alter table student rename to students;		//to rename table name
+
+alter table student change column id  student_id int; 		//to change column name
+
+alter table student  modify cgpa int;		//to change constraint/datatype of a column
+
+----------------------------------------------------------------------------------------------
+
+truncate table student;		//to delete data from the table 
+
+
+----------------------------------------------------------------------------------------------
+
+//Joins in SQL
+Joins is used to combine rows from two or more tables,based on a related column between them.
+
+Types of Join
+1. Inner Join  (data common in both table)
+2. Left Join   (All data of left table and common in both table)
+3. Right Join	(All data of Right table and common in both table)
+4. Full Join	(All data of both table)
+
+----------------------------------------------------------------
+
+1. Inner Join= Returns records that have matching values in both tables.
+
+//Table student created
+	
+create table student(
+id int primary key,
+name varchar(50)
+);
+
+
+insert into student(id,name) values(1,"Rajeev"),(2,"Raj"),(3,"Rajesh");
+
+//Table course created
+
+create table course(
+id int primary key,
+course varchar(50)
+);
+
+
+insert into course(id,course) values(3,"BE"),(4,"BCA"),(5,"MCA");
+
+
+select * from student inner join course on student.id=course.id;		//id ke base pe join kiye h	kyuki id dono me hai isiye
+
+
+------------------------------------------------------------------------------------
+
+//Alias means duplicate name    jab bhi loi table ka name bahut bada rahta h jaise table ka name BECSESem7StudentList, iske jagah pe BECSESem7StudentList as B likh denge to jab hmlog ko kabhi jaroori pada to B bhi likh denge to sahi rahega
+
+-------------------------------------------------------------------------------------------------------------------
+
+//Left Join
+
+Returns all records from the left table, and the matched records from the right table.
+
+
+create table student(
+id int primary key,
+name varchar(50)
+);
+
+
+insert into student(id,name) values(1,"Rajeev"),(2,"Raj"),(3,"Rajesh");
+
+
+create table course(
+id int primary key,
+course varchar(50)
+);
+
+
+insert into course(id,course) values(3,"BE"),(4,"BCA"),(5,"MCA");
+
+
+
+select * from student left join course on student.id=course.id;
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+//Right Join
+
+Returns all records from the right table, and the matched records from the left table.
+
+
+create table student(
+id int primary key,
+name varchar(50)
+);
+
+
+insert into student(id,name) values(1,"Rajeev"),(2,"Raj"),(3,"Rajesh");
+
+
+create table course(
+id int primary key,
+course varchar(50)
+);
+
+
+insert into course(id,course) values(3,"BE"),(4,"BCA"),(5,"MCA");
+
+
+
+select * from student right join course on student.id=course.id;
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+//Full Join
+
+Returns all records When there is a match in either left or right table.
+
+
+create table student(
+id int primary key,
+name varchar(50)
+);
+
+
+insert into student(id,name) values(1,"Rajeev"),(2,"Raj"),(3,"Rajesh");
+
+
+create table course(
+id int primary key,
+course varchar(50)
+);
+
+
+insert into course(id,course) values(3,"BE"),(4,"BCA"),(5,"MCA");
+
+
+
+select * from student left join course on student.id=course.id
+union
+select * from student right join course on student.id=course.id
+;
+
+
+
+------------------------------------------------------------------------------------------------------------------
+
+//Left Exclusive Join(means sirf left ka hi data chahiye jo data right ke saath overlap karta h wo data nhi chahiye)
+
+//Right Exclusive join
+
+
+-------------------------------------------------------------
+
+//Self Join= It is a regular join but the table is joined with itself.
+
+
+create table employee(
+id int primary key,
+name varchar(50),
+manager_id int
+);
+
+insert into employee(id,name,manager_id) values(101,"Adam",103),(102,"Bob",104),(103,"casey",Null),(104,"donald",103);
+
+
+ select * from employee as a join employee as b on a.id=b.manager_id;
+
+select a.name as manager_name,b.name from employee as a join employee as b on a.id=b.manager_id;
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+//Union= It is used to combine the result-set of two or more SELECT statements. Gives UNIQUE records(jo duplicate h wo remove ho jayega).
+
+
+create table student(
+id int,
+name varchar(50),
+age int
+);
+
+insert into student(id,name,age) values(1,"Rajeev",50),(2,"Raj",40);
+
+
+create table teacher(
+id int,
+name varchar(50),
+age int
+);
+
+insert into teacher(id,name,age) values(1,"Rajeev",50),(2,"Rakesh",30),(3,"Parthiv",20); 
+
+select * from student union select * from teacher; 
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+//union All
+
+isme dono table ka data deta h(duplicate remove nhi karta h)
+
+
+select * from student union All select * from teacher; 
+
+
+---------------------------------------------------------------------------------------------
+
+//sub query= A query which is written inside another query.
+
+jaise sabse pahle hmlog ko ek hi query ke ander aesa likhna h ki pahle marks ka average find ho phir jiska bhi marks average se jyada ho usko print karanah
+
+select avg(marks) from student where marks>(select avg(marks) from student);
