@@ -46,6 +46,7 @@ VARCHAR ek data type hai jo database (MySQL, SQL) me text ya string store karne 
 
 
 NVARCHAR bhi VARCHAR ki tarah text store karta hai, lekin ye Unicode characters support karta hai — yani multiple languages (Hindi, Chinese, emoji, etc.) store kar sakta hai.
+Zyada storage leta hai.
 
 
 //Create table inside college database
