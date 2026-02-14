@@ -41,6 +41,10 @@ schema means design means columns
 
 ------------------------------------------------------
 
+VARCHAR ka full form hota hai Variable Character.
+VARCHAR ek data type hai jo database (MySQL, SQL) me text ya string store karne ke liye use hota hai, aur iska size fixed nahi hota, jitna data likhoge utni hi memory use karega.
+
+
 //Create table inside college database
 
 create table student(
